@@ -7,7 +7,7 @@ export const HomePage = () => {
     <>
       <Header />
 
-      <div className="home-page">
+      <div className="home-page"> 
         <div className="products-grid">
           {products.map((product) => {
             return (
