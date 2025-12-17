@@ -5,7 +5,7 @@ import { PaymentSummary } from "./PaymentSummary";
 import "./checkout-header.css";
 import "./CheckoutPage.css";
 
-export const CheckoutPage = ({ cart }) => {
+export const CheckoutPage = ({ cart, loadCart }) => {
   const [deliveryOptions, setDeliveryOptions] = useState([]);
   const [paymentSummary, setPaymentSummary] = useState(null); //it's an object
 
@@ -19,8 +19,9 @@ export const CheckoutPage = ({ cart }) => {
       response = await axios.get("/api/payment-summary");
       setPaymentSummary(response.data);
     };
+
     fetchCheckoutData();
-  }, []);
+  }, [cart]);
 
   // deliveryOptions contains all possible delivery methods, each with price and estimated delivery date.
 
@@ -55,7 +56,11 @@ export const CheckoutPage = ({ cart }) => {
         <div className="page-title">Review your order</div>
 
         <div className="checkout-grid">
-          <OrderSummary cart={cart} deliveryOptions={deliveryOptions} />
+          <OrderSummary
+            cart={cart}
+            deliveryOptions={deliveryOptions}
+            loadCart={loadCart}
+          />
 
           <PaymentSummary paymentSummary={paymentSummary} />
         </div>
