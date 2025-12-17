@@ -46,7 +46,6 @@ export const PaymentSummary = ({ paymentSummary }) => {
           </button>
         </>
       )}
-      ;
     </div>
   );
 };
