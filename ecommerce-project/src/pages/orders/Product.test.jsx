@@ -1,6 +1,11 @@
 import { it, expect, describe, vi } from "vitest";
 import { render, screen } from "@testing-library/react"; // renders a component in a fake webpage,screen checks the fake web page
+import userEvent from '@testing-library/user-event'; 
+import axios from "axios"; // Fake version
 import { Product } from "../home/Product";
+
+vi.mock('axios'); // mocks the entire axios package,when we click addToCartButton to we access the fake version of axios
+// but we can test the axios.post and the values given to axios,for that we have to import the axios
 
 // The following is a test suite
 describe("Product component", () => {
@@ -44,9 +49,39 @@ describe("Product component", () => {
     );
 
     // For Rating
-    expect(
-      screen.getByText('87')
-    ).toBeInTheDocument();
+    expect(screen.getByText("87")).toBeInTheDocument();
+  });
+
+  it("adds a product to the cart", async () => {
+    const product = {
+      id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+      image: "images/products/athletic-cotton-socks-6-pairs.jpg",
+      name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
+      rating: {
+        stars: 4.5,
+        count: 87,
+      },
+      priceCents: 1090,
+      keywords: ["socks", "sports", "apparel"],
+    };
+
+    const loadCart = vi.fn();
+ 
+    render(<Product product={product} loadCart={loadCart} />);
+
+    const user = userEvent.setup();
+    const addToCartButton = screen.getByTestId('add-to-cart-button');
+    await user.click(addToCartButton); //it is asynchronous code
+    // After clicking the button it sends the rquest to the backend,in our tests we should not contact a reaal backend
+
+    expect(axios.post).toHaveBeenCalledWith(
+      '/api/cart-items',
+      {
+        productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
+        quantity: 1
+      }
+    );
+    expect(loadCart).toHaveBeenCalled(); // Check whether our code called loadCart
   });
 });
 
