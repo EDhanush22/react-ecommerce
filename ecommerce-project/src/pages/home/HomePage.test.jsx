@@ -1,7 +1,6 @@
 import { it, expect, describe, vi, beforeEach } from "vitest";
 import { render, screen, within } from "@testing-library/react"; // renders a component in a fake webpage,screen checks the fake web page
 import { MemoryRouter } from "react-router"; // specificaally for testing
-import userEvent from "@testing-library/user-event";
 import axios from "axios"; // Fake version
 import { HomePage } from "./HomePage";
 
@@ -66,7 +65,7 @@ describe("HomePage component", () => {
     ).toBeInTheDocument();
 
     expect(
-      within(productContainers[0]).getByText(
+      within(productContainers[1]).getByText(
         "Intermediate Size Basketball"
       )
     ).toBeInTheDocument();
